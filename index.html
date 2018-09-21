@@ -1,53 +1,110 @@
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
-    <title>
-    Math Practice
-    </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="css/main.css">
+  <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah|Handlee" rel="stylesheet">
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+  <title>
+    Katie's Math Homework
+  </title>
 </head>
 <body>
-    <div id="app"></div>
-    <script type="text/babel">
-        class App extends React.Component {
-            state = {
-                a: 1,
-                b: 1,
-                min: 0,
-                max: 18,
-            }
-
-            // generate random number between min and max
-            random = () => {
-                return Math.floor(Math.random() * (this.state.max - this.state.min + 1)) + this.state.min;
-            }
-
-            // get next problem
-            next = (e) => {
-                this.setState({
-                    a: this.random(),
-                    b: this.random()
-                });
-            }
-
-            // render div in page
-            render() {
-                return (
-                    <div className="problem">
-                        <h1>{ this.state.a }</h1>
-                        <h1>{ this.state.b }</h1>
-                        <h1>{ this.state.a + this.state.b }</h1>
-                        <button onClick={this.next}>Click Me</button>
-                    </div>
-                )
-            }
+  <header>
+    <div class="title">
+      <h1>Katie's Math Homework</h1>
+    </div>
+  </header>
+  <main>
+    <div class="flex">
+      <div class="left">
+        <div id="problem">
+        </div>
+      </div>
+      <div class="right">
+        <img src="img/cheetah.jpg" alt="cheetah">
+      </div>
+    </div>
+  </main>
+  <footer>
+    Created for Katie in 2018 <br />Kodiak Workshop
+  </footer>
+  <script type="text/babel">
+    class Problem extends React.Component {
+        state = {
+            a: 1,
+            b: 1,
+            min: 0,
+            max: 18,
+            countCorrect: 1,
+            countIncorrect: 1
+        }
+        // generate random number between min and max
+        random = () => {
+            return Math.floor(Math.random() * (this.state.max - this.state.min + 1)) + this.state.min;
+        }
+        // get next problem
+        next = (e) => {
+            this.setState({
+                a: this.random(),
+                b: this.random()
+            });
         }
 
-        ReactDOM.render(<App />,document.getElementById("app"));
-    </script>
+        checkAnswer = (ans) => {
+          if (ans == this.state.a + this.state.b) {
+            this.setState({
+              countCorrect: this.state.countCorrect + 1
+            });
+            console.log("Correct! " + this.state.a + " + " + this.state.b + " = " + ans + ": Count " + this.state.countCorrect);
+          } else {
+            this.setState({
+              countIncorrect: this.state.countIncorrect + 1
+            });
+            console.log("Incorrect: " + this.state.a + " + " + this.state.b + " = " + ans + " Anwser: " + (this.state.a + this.state.b));
+          }
+        }
+        //
+        handleSubmit = (e) => {
+          e.preventDefault();
+          this.checkAnswer(e.target.ans.value);
+          //console.log(e.target.ans.value);
+          this.next()
+        }
+        // build div
+        render() {
+          return (
+            <div className="function">
+              <table>
+                <tr>
+                  <th>
+                  </th>
+                  <th>
+                    <h2>{ this.state.a }</h2>
+                  </th>
+                </tr>
+                <tr>
+                  <th>
+                    <h2> + </h2>
+                  </th>
+                  <th>
+                    <h2>{ this.state.b }</h2>
+                  </th>
+                </tr>
+              </table>
+              <h2>{ this.state.a + this.state.b }</h2>
+              <form onSubmit={this.handleSubmit}>
+                <input type="number" id="ans"/>
+                <button>Check Answer</button>
+              </form>
+            </div>
+          )
+        }
+      }
+    // Place div in page
+    ReactDOM.render(<Problem />,document.getElementById("problem"));
+  </script>
 </body>
-<footer>
-</footer>
 </html>
