@@ -34,8 +34,8 @@
   <script type="text/babel">
     class Problem extends React.Component {
         state = {
-            a: 1,
-            b: 1,
+            a: null,
+            b: null,
             min: 0,
             max: 18,
             countCorrect: 1,
@@ -52,7 +52,7 @@
                 b: this.random()
             });
         }
-
+        // checks answser, logs and updates counts
         checkAnswer = (ans) => {
           if (ans == this.state.a + this.state.b) {
             this.setState({
@@ -66,12 +66,16 @@
             console.log("Incorrect: " + this.state.a + " + " + this.state.b + " = " + ans + " Anwser: " + (this.state.a + this.state.b));
           }
         }
-        //
+        // checks answer, generates new problem, clears form
         handleSubmit = (e) => {
           e.preventDefault();
           this.checkAnswer(e.target.ans.value);
-          //console.log(e.target.ans.value);
-          this.next()
+          this.next();
+          e.target.reset();
+        }
+        // load with random numbers
+        componentWillMount = (e) => {
+          this.next();
         }
         // build div
         render() {
@@ -96,7 +100,7 @@
               </table>
               <h2>{ this.state.a + this.state.b }</h2>
               <form onSubmit={this.handleSubmit}>
-                <input type="number" id="ans"/>
+                <input type="text" id="ans"/>
                 <button>Check Answer</button>
               </form>
             </div>
